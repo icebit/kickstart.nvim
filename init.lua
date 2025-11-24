@@ -325,7 +325,7 @@ require('lazy').setup({
           ['<C-t>'] = { 'actions.select', opts = { tab = true } },
           ['<C-p>'] = 'actions.preview',
           ['<C-c>'] = { 'actions.close', mode = 'n' },
-          ['<C-l>'] = 'actions.refresh',
+          ['<C-r>'] = 'actions.refresh',
           ['-'] = { 'actions.parent', mode = 'n' },
           ['_'] = { 'actions.open_cwd', mode = 'n' },
           ['`'] = { 'actions.cd', mode = 'n' },
@@ -336,7 +336,7 @@ require('lazy').setup({
           ['g\\'] = { 'actions.toggle_trash', mode = 'n' },
         },
         -- Set to false to disable all of the above keymaps
-        use_default_keymaps = true,
+        use_default_keymaps = false,
         view_options = {
           -- Show files and directories that start with "."
           show_hidden = false,
@@ -459,11 +459,54 @@ require('lazy').setup({
         keymaps_help = {
           border = nil,
         },
+
+        vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' }),
       }
     end,
   },
 
-  -- nvim v0.8.0
+  {
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    opts = {
+      menu = {
+        width = vim.api.nvim_win_get_width(0) - 4,
+      },
+      settings = {
+        save_on_toggle = true,
+      },
+    },
+    keys = function()
+      local keys = {
+        {
+          '<leader>H',
+          function()
+            require('harpoon'):list():add()
+          end,
+          desc = 'Harpoon File',
+        },
+        {
+          '<leader>h',
+          function()
+            local harpoon = require 'harpoon'
+            harpoon.ui:toggle_quick_menu(harpoon:list())
+          end,
+          desc = 'Harpoon Quick Menu',
+        },
+      }
+
+      for i = 1, 9 do
+        table.insert(keys, {
+          '<leader>' .. i,
+          function()
+            require('harpoon'):list():select(i)
+          end,
+          desc = 'Harpoon to File ' .. i,
+        })
+      end
+      return keys
+    end,
+  },
   {
     'kdheepak/lazygit.nvim',
     lazy = true,
