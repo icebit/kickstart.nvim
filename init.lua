@@ -206,11 +206,11 @@ vim.keymap.set('t', '<C-j>', [[<C-\><C-n><C-w>j]])
 vim.keymap.set('t', '<C-k>', [[<C-\><C-n><C-w>k]])
 vim.keymap.set('t', '<C-l>', [[<C-\><C-n><C-w>l]])
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]])
-
-vim.api.nvim_create_autocmd({ 'TermOpen', 'BufEnter', 'WinEnter' }, {
-  pattern = 'term://*',
-  command = 'startinsert',
-})
+--
+-- vim.api.nvim_create_autocmd({ 'TermOpen', 'BufEnter', 'WinEnter' }, {
+--   pattern = 'term://*',
+--   command = 'startinsert',
+-- })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -334,7 +334,7 @@ require('lazy').setup({
           ['g?'] = { 'actions.show_help', mode = 'n' },
           ['<CR>'] = 'actions.select',
           ['<C-s>'] = { 'actions.select', opts = { vertical = true } },
-          ['<C-h>'] = { 'actions.select', opts = { horizontal = true } },
+          ['<C-o>'] = { 'actions.select', opts = { horizontal = true } },
           ['<C-t>'] = { 'actions.select', opts = { tab = true } },
           ['<C-p>'] = 'actions.preview',
           ['<C-c>'] = { 'actions.close', mode = 'n' },
