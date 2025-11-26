@@ -247,6 +247,35 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
+-- AUTOREFRESH
+-- Create a variable to track the state
+vim.g.auto_refresh_enabled = false
+
+-- Function to toggle the behavior
+function ToggleAutoRefresh()
+  if vim.g.auto_refresh_enabled then
+    vim.api.nvim_clear_autocmds { group = 'AutoRefresh' }
+    vim.g.auto_refresh_enabled = false
+    print 'Auto refresh disabled'
+  else
+    vim.o.autoread = true
+    vim.api.nvim_create_augroup('AutoRefresh', { clear = true })
+    vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter' }, {
+      group = 'AutoRefresh',
+      command = "if mode() != 'c' | checktime | endif",
+      pattern = '*',
+    })
+    vim.g.auto_refresh_enabled = true
+    print 'Auto refresh enabled'
+  end
+end
+
+vim.keymap.set('n', '<leader>ar', ToggleAutoRefresh, {
+  noremap = true,
+  silent = false,
+  desc = 'Toggle auto refresh of files',
+})
+
 -- [[ Configure and install plugins ]]
 --
 --  To check the current status of your plugins, run
@@ -334,7 +363,7 @@ require('lazy').setup({
           ['g?'] = { 'actions.show_help', mode = 'n' },
           ['<CR>'] = 'actions.select',
           ['<C-s>'] = { 'actions.select', opts = { vertical = true } },
-          ['<C-o>'] = { 'actions.select', opts = { horizontal = true } },
+          -- ['<C-n>'] = { 'actions.select', opts = { horizontal = true } },
           ['<C-t>'] = { 'actions.select', opts = { tab = true } },
           ['<C-p>'] = 'actions.preview',
           ['<C-c>'] = { 'actions.close', mode = 'n' },
